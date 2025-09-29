@@ -1,61 +1,389 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>Сравнение JavaScript и jQuery</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Практика: Vanilla JS vs jQuery — готовый пример</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    :root{
+      --bg1: linear-gradient(135deg,#0f172a,#0b3d91);
+      --card: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --accent: #6ee7b7;
+      --accent-2: #60a5fa;
+      --text: #e6eef8;
+      --muted: #a8b3c7;
+      --radius: 14px;
     }
-    button {
-      margin: 10px 0;
-      padding: 10px 15px;
-      cursor: pointer;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: var(--bg1);
+      -webkit-font-smoothing:antialiased;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:36px;
     }
-    .box {
-      width: 150px;
-      height: 150px;
-      background: lightblue;
-      margin-top: 15px;
-      transition: all 0.5s ease;
+
+    .wrap{
+      max-width:1100px;
+      width:100%;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .title{
+      font-weight:700;
+      font-size:20px;
+      letter-spacing:0.2px;
+    }
+    .subtitle{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: 0 6px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .card h3{
+      margin:0 0 12px 0;
+      font-size:16px;
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    button.btn{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.08);
+      color:var(--text);
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      transition:all .18s ease;
+      font-size:13px;
+    }
+    button.btn:hover{ transform:translateY(-3px); box-shadow:0 6px 18px rgba(2,6,23,0.6) }
+    button.primary{
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#04203b;
+      border: none;
+    }
+
+    .box{
+      width:220px;
+      height:130px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#04203b;
+      font-weight:700;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+      transition: transform .45s cubic-bezier(.2,.9,.2,1), opacity .35s ease, width .45s ease, height .45s ease, filter .35s ease;
+      background: linear-gradient(180deg, #dbeffd, #9fead1);
+      margin-bottom:8px;
+      user-select:none;
+    }
+    .box--hidden{ opacity:0; transform:translateY(12px) scale(.84); pointer-events:none; filter:blur(2px) }
+    .box--big{ width:360px; height:200px; transform:scale(1.03) }
+    .note{ color:var(--muted); font-size:13px; margin-top:8px }
+
+    .row{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .footer{
+      margin-top:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{ grid-template-columns:1fr; }
+      .box{ margin:12px 0; }
+    }
+
+    /* small code block */
+    pre.code{
+      background: rgba(3,8,23,0.35);
+      padding:12px;
+      border-radius:8px;
+      font-size:12px;
+      color:var(--muted);
+      overflow:auto;
+      white-space:pre-wrap;
+      margin-top:10px;
     }
   </style>
 </head>
 <body>
-  <h2>Vanilla JavaScript</h2>
-  <button id="btn-js">Нажми (JS)</button>
-  <div id="box-js" class="box"></div>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="title">Практика — Vanilla JavaScript vs jQuery</div>
+        <div class="subtitle">Тестовая страница: одинаковые действия решены двумя способами</div>
+      </div>
+      <div style="text-align:right">
+        <div class="subtitle">Инструкция: Нажмите кнопки в карточке — посмотрите результат</div>
+      </div>
+    </header>
 
-  <h2>jQuery</h2>
-  <button id="btn-jq">Нажми (jQuery)</button>
-  <div id="box-jq" class="box"></div>
+    <div class="grid">
+      <!-- VANILLA JS CARD -->
+      <section class="card" aria-labelledby="js-title">
+        <h3 id="js-title">Vanilla JavaScript — чистый JS</h3>
 
-  <!-- Vanilla JS -->
-  <script>
-    const btnJs = document.getElementById("btn-js");
-    const boxJs = document.getElementById("box-js");
+        <div class="controls" role="group" aria-label="Controls JS">
+          <button class="btn" id="js-color">Изменить цвет</button>
+          <button class="btn" id="js-toggle">Показ/Скрыть</button>
+          <button class="btn" id="js-anim">Анимация размера</button>
+          <button class="btn" id="js-reset">Сброс</button>
+          <button class="btn primary" id="js-copy">Копировать код</button>
+        </div>
 
-    btnJs.addEventListener("click", () => {
-      // меняем цвет
-      boxJs.style.backgroundColor = "lightgreen";
-      // скрываем через CSS-анимацию
-      setTimeout(() => {
-        boxJs.style.opacity = "0";
-        boxJs.style.transform = "scale(0.5)";
-      }, 500);
-    });
-  </script>
+        <div id="box-js" class="box" role="region" aria-label="Box JavaScript">JS Блок</div>
+        <div class="note">Vanilla JS: CSS transitions + чистые DOM API, быстрый и современный.</div>
 
-  <!-- jQuery -->
+        <pre class="code" id="js-code">
+// Пример: чистый JS (управление блоком)
+// Сохранено в переменных для простоты
+// (в документации преподавателю можно вставить этот код)
+const btn = document.getElementById('js-color');
+const box = document.getElementById('box-js');
+// ... дальше внизу файла
+        </pre>
+      </section>
+
+      <!-- JQUERY CARD -->
+      <section class="card" aria-labelledby="jq-title">
+        <h3 id="jq-title">jQuery — библиотека</h3>
+
+        <div class="controls" role="group" aria-label="Controls jQuery">
+          <button class="btn" id="jq-color">Изменить цвет</button>
+          <button class="btn" id="jq-toggle">Показ/Скрыть</button>
+          <button class="btn" id="jq-anim">Анимация размера</button>
+          <button class="btn" id="jq-reset">Сброс</button>
+          <button class="btn primary" id="jq-copy">Копировать код</button>
+        </div>
+
+        <div id="box-jq" class="box" role="region" aria-label="Box jQuery">jQuery Блок</div>
+        <div class="note">jQuery: короткий синтаксис, удобные анимации и cross-browser</div>
+
+        <pre class="code" id="jq-code">
+// Пример: jQuery-реализация
+// Подключите jQuery и используйте $('#id') для управления элементами
+        </pre>
+      </section>
+    </div>
+
+    <div class="footer">
+      <div>
+        <strong>Вы:</strong> сохраните файл — откройте в браузере. Всё готово. 
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" id="download">Скачать HTML</button>
+        <button class="btn" id="reset-all">Полный сброс</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- СКРИПТ: реализация функционала -->
   <script>
-    $("#btn-jq").on("click", function() {
-      // меняем цвет
-      $("#box-jq").css("background-color", "lightgreen");
-      // скрываем с анимацией
-      $("#box-jq").animate({ opacity: 0, width: "50px", height: "50px" }, 700);
+  /* -------------------------
+     Vanilla JS часть
+     ------------------------- */
+  (function(){
+    const colors = ['#6ee7b7','#fef08a','#fbcfe8','#93c5fd','#ffd6a5','#bde0fe'];
+    const btnColor = document.getElementById('js-color');
+    const btnToggle = document.getElementById('js-toggle');
+    const btnAnim = document.getElementById('js-anim');
+    const btnReset = document.getElementById('js-reset');
+    const btnCopy = document.getElementById('js-copy');
+
+    const box = document.getElementById('box-js');
+
+    // Сохраним оригинальные стили для сброса
+    const original = {
+      background: box.style.background,
+      width: box.offsetWidth + 'px',
+      height: box.offsetHeight + 'px',
+      opacity: window.getComputedStyle(box).opacity,
+      transform: window.getComputedStyle(box).transform
+    };
+
+    btnColor.addEventListener('click', () => {
+      // смена цвета (рандом из массива)
+      const next = colors[Math.floor(Math.random()*colors.length)];
+      box.style.background = next;
+      // небольшая подсветка
+      box.style.filter = 'drop-shadow(0 10px 30px rgba(0,0,0,0.35))';
+      setTimeout(()=> box.style.filter = '', 600);
     });
+
+    btnToggle.addEventListener('click', () => {
+      // покаж/скрой с CSS трансформацией (toggle класса)
+      box.classList.toggle('box--hidden');
+    });
+
+    btnAnim.addEventListener('click', () => {
+      // toggle big state
+      box.classList.toggle('box--big');
+    });
+
+    btnReset.addEventListener('click', () => {
+      // вернуть исходные размеры и видимость
+      box.classList.remove('box--hidden');
+      box.classList.remove('box--big');
+      box.style.width = original.width;
+      box.style.height = original.height;
+      box.style.background = 'linear-gradient(180deg, #dbeffd, #9fead1)';
+      box.style.opacity = original.opacity;
+      box.style.transform = original.transform;
+    });
+
+    // копировать кусочек кода (пример)
+    btnCopy.addEventListener('click', async () => {
+      const sample = `// Пример (Vanilla JS)\nconst btn = document.getElementById('js-color');\nconst box = document.getElementById('box-js');\nbtn.addEventListener('click', () => box.style.background = '#6ee7b7');`;
+      try {
+        await navigator.clipboard.writeText(sample);
+        btnCopy.textContent = 'Скопировано ✓';
+        setTimeout(()=> btnCopy.textContent = 'Копировать код', 1100);
+      } catch (e) {
+        alert('Копирование не доступно в этом браузере');
+      }
+    });
+  })();
+
+
+  /* -------------------------
+     jQuery часть
+     ------------------------- */
+  (function($){
+    const colors = ['#60a5fa','#fca5a5','#fde68a','#bbf7d0','#c7b8ff','#ffd6a5'];
+    const $box = $('#box-jq');
+    const $btnColor = $('#jq-color');
+    const $btnToggle = $('#jq-toggle');
+    const $btnAnim = $('#jq-anim');
+    const $btnReset = $('#jq-reset');
+    const $btnCopy = $('#jq-copy');
+
+    // Сохраняем оригинал
+    const original = {
+      bg: $box.css('background'),
+      width: $box.width(),
+      height: $box.height(),
+      opacity: $box.css('opacity')
+    };
+
+    $btnColor.on('click', function(){
+      const next = colors[Math.floor(Math.random()*colors.length)];
+      $box.css('background', next).css('filter','drop-shadow(0 10px 30px rgba(0,0,0,0.35))');
+      setTimeout(()=> $box.css('filter',''), 600);
+    });
+
+    $btnToggle.on('click', function(){
+      // плавно скрываем/показываем (fade + slide-like)
+      if ($box.is(':visible') && $box.css('opacity') > 0.1) {
+        $box.animate({opacity:0, height: '60px'}, 450, function(){ $box.addClass('box--hidden'); });
+      } else {
+        $box.removeClass('box--hidden').animate({opacity:1, height: original.height}, 450);
+      }
+    });
+
+    $btnAnim.on('click', function(){
+      // короткая анимация "увеличить и вернуть"
+      if (!$box.data('animating')) {
+        $box.data('animating', true);
+        $box.animate({width: 360, height: 200}, 450)
+            .animate({width: original.width, height: original.height}, 450, function(){ $box.data('animating', false); });
+      }
+    });
+
+    $btnReset.on('click', function(){
+      $box.show().removeClass('box--hidden').css({
+        width: original.width + 'px',
+        height: original.height + 'px',
+        background: original.bg,
+        opacity: original.opacity
+      });
+    });
+
+    $btnCopy.on('click', async function(){
+      const sample = "// Пример (jQuery)\n$('#jq-color').on('click', function(){\n  $('#box-jq').css('background', '#60a5fa');\n});";
+      try {
+        await navigator.clipboard.writeText(sample);
+        $btnCopy.text('Скопировано ✓');
+        setTimeout(()=> $btnCopy.text('Копировать код'), 1100);
+      } catch(e){
+        alert('Копирование не доступно');
+      }
+    });
+
+  })(jQuery);
+
+
+  /* -------------------------
+     Скачивание текущего HTML (кнопка "Скачать HTML")
+     ------------------------- */
+  (function(){
+    const dl = document.getElementById('download');
+    dl.addEventListener('click', () => {
+      // Получаем весь HTML документа и сохраняем в файл
+      const doctype = '<!doctype html>\n';
+      const html = document.documentElement.outerHTML;
+      const blob = new Blob([doctype + html], {type: 'text/html;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'compare_full.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 5000);
+    });
+
+    document.getElementById('reset-all').addEventListener('click', () => {
+      // полный сброс: обновим страницу
+      if (confirm('Вы уверены? Выполнить полный сброс (перезагрузить страницу).')) location.reload();
+    });
+  })();
   </script>
 </body>
 </html>
