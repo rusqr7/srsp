@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сравнение JavaScript и jQuery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    button {
+      margin: 10px 0;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+    .box {
+      width: 150px;
+      height: 150px;
+      background: lightblue;
+      margin-top: 15px;
+      transition: all 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <h2>Vanilla JavaScript</h2>
+  <button id="btn-js">Нажми (JS)</button>
+  <div id="box-js" class="box"></div>
+
+  <h2>jQuery</h2>
+  <button id="btn-jq">Нажми (jQuery)</button>
+  <div id="box-jq" class="box"></div>
+
+  <!-- Vanilla JS -->
+  <script>
+    const btnJs = document.getElementById("btn-js");
+    const boxJs = document.getElementById("box-js");
+
+    btnJs.addEventListener("click", () => {
+      // меняем цвет
+      boxJs.style.backgroundColor = "lightgreen";
+      // скрываем через CSS-анимацию
+      setTimeout(() => {
+        boxJs.style.opacity = "0";
+        boxJs.style.transform = "scale(0.5)";
+      }, 500);
+    });
+  </script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $("#btn-jq").on("click", function() {
+      // меняем цвет
+      $("#box-jq").css("background-color", "lightgreen");
+      // скрываем с анимацией
+      $("#box-jq").animate({ opacity: 0, width: "50px", height: "50px" }, 700);
+    });
+  </script>
+</body>
+</html>
